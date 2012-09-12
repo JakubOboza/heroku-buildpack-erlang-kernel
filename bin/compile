@@ -18,6 +18,7 @@ ver=${OTP_VERSION:=${DEFAULT_OTP_VERSION}}
 tarball=${ver}.tgz
 OTP_TARBALL_URL="https://s3.amazonaws.com/heroku-buildpack-erlang/${tarball}"
 ERLROOT=${build}/otp
+OTP_DIR=${HOME}/otp
 
 echo "-----> Using Erlang/OTP $ver"
 
@@ -37,10 +38,11 @@ echo "-------> Unpacking Erlang/OTP $ver"
 mkdir -p ${ERLROOT}
 tar zxf ${cache}/${tarball} -C ${ERLROOT} --strip-components=2
 echo "-------> Installing Erlang/OTP $ver"
-ln -s ${ERLROOT} /app/otp
-${ERLROOT}/Install -minimal /app/otp
+mkdir -p ${OTP_DIR}
+ln -s ${ERLROOT} ${OTP_DIR}
+${ERLROOT}/Install -minimal ${OTP_DIR}
 
-PATH=/app/otp/bin:$PATH
+PATH=${OTP_DIR}/bin:$PATH
 
 cd $build
 
